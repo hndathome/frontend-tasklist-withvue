@@ -66,7 +66,7 @@
             <div class="col-md-8 offset-md-2 to-do-list">
                 <div class="row">
                     <div class="col-12" id="to-do-col">
-                        <template v-for="task in tasks">
+                        <template v-for="task in tasks" :key="`task-${index}`">
                             <div class="to-do-item">
                                 <i class="fa fa-fw fa-trash" style="color: red;" v-on:click="deleteTask(task)"
                                     title="delete task"></i>
@@ -108,9 +108,10 @@
                 data: {
                     enterTask: null,
                     tasks: [],
+                    counter: 0,
                     deleteTask: function (task) {
                         this.tasks = this.tasks.filter(function (e) {
-                            return e.text != task.text;
+                            return e.id != task.id;
                         });
                     },
                     markComplete: function (task) {
@@ -123,9 +124,12 @@
                         }
                         this.tasks.push({
                             isComplete: false,
-                            text: this.enterTask
+                            text: this.enterTask,
+                            id: this.counter,
                         });
+                        this.counter += 1;
                         this.enterTask = null;
+                        console.log(this.tasks)
                     },
                     clearAll: function () {
                         this.tasks = [];
