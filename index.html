@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .to-do-list {
+            background-color: #ebecf0;
+            border-radius: 3px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            max-height: 100%;
+            position: relative;
+            white-space: normal;
+            padding: 20px;
+        }
+
+        .to-do-item {
+            background-color: #fff;
+            border-radius: 3px;
+            box-shadow: 0 1px 0 rgba(9, 30, 66, .25);
+            cursor: pointer;
+            display: block;
+            margin-bottom: 8px;
+            position: relative;
+            text-decoration: none;
+            padding: 8px;
+            z-index: 0;
+        }
+
+        .fa-check-square-o {
+            color: green;
+        }
+
+        .fa-square-o {
+            color: rgb(33, 37, 41);
+        }
+
+        .complete {
+            color: green;
+            text-decoration: line-through;
+        }
+
+        .incomplete {
+            color: rgb(33, 37, 41);
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div class="container" id="app">
+        <h1>To Do List</h1>
+        <div class="row" style="padding: 20px;">
+            <div class="col-md-8 offset-md-2 to-do-list">
+                <div class="row">
+                    <div class="col-12" id="to-do-col">
+                        <template v-for="task in tasks">
+                            <div class="to-do-item">
+                                <i class="fa fa-fw fa-trash" style="color: red;" v-on:click="deleteTask(task)"
+                                    title="delete task"></i>
+                                <i v-bind:class="task.isComplete ? 'fa fa-fw fa-check-square-o' : 'fa fa-fw fa-square-o'"
+                                    v-model="task.isComplete" title="mark complete" v-on:click="markComplete(task)"></i>
+                                <span v-bind:class="task.isComplete ? 'complete' : 'incomplete'">{{ task.text }}</span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                <hr>
+                <div class="form-group row">
+                    <div class="col-md-8">
+                        <input v-model="enterTask" type="text" class="form-control" placeholder="Enter task"
+                            style="margin-bottom: 8px;" v-on:keyup.enter="addTask()">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <button type="button" class="btn btn-primary" v-on:click="addTask()" title="add task"
+                            style="margin-bottom: 8px;"><i class="fa fa-plus"></i> Task</button>
+                        <button type="button" class="btn btn-danger" v-on:click="clearAll()" title="delete all tasks"
+                            style="margin-bottom: 8px;"><i class="fa fa-trash"></i> All Tasks</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script>
+            var app = new Vue({
+                el: "#app",
+                data: {
+                    enterTask: null,
+                    tasks: [],
+                    deleteTask: function (task) {
+                        this.tasks = this.tasks.filter(function (e) {
+                            return e.text != task.text;
+                        });
+                    },
+                    markComplete: function (task) {
+                        task.isComplete = task.isComplete ? false : true;
+                    },
+                    addTask: function () {
+                        if (this.enterTask == null) {
+                            alert('Enter a task!');
+                            return;
+                        }
+                        this.tasks.push({
+                            isComplete: false,
+                            text: this.enterTask
+                        });
+                        this.enterTask = null;
+                    },
+                    clearAll: function () {
+                        this.tasks = [];
+                    }
+                }
+            });
+        </script>
+</body>
+
+</html>
