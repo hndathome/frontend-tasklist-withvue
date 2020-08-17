@@ -117,7 +117,7 @@
                         task.isComplete = task.isComplete ? false : true;
                     },
                     addTask: function () {
-                        if (this.enterTask == null) {
+                        if (this.enterTask == null || (/^\s*$/.test(this.enterTask))) {
                             alert('Enter a task!');
                             return;
                         }
